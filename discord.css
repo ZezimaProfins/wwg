@@ -194,7 +194,6 @@ discord-widget widget-footer {
     display: flex;
     -webkit-box-align: right;
     -ms-flex-align: right;
-    align-items: right;
     min-height: 30px;
 	color: #fff;
 	
@@ -242,6 +241,7 @@ discord-widget widget-footer widget-button-join:hover {
     cursor: pointer;
 
 }
+
 
 
 
