@@ -30,15 +30,16 @@ html {
     font-size: smaller !important;
   }
 }
+
 @media screen and (min-width: 540px) {
   body {
     max-width: 540px;
   }
 }
+
 body {
   background-color: var(--background);
   margin: auto;
-
 }
 
 a {
@@ -79,10 +80,3 @@ a:hover {
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
-
-
-
-
-
-
-
