@@ -4,7 +4,6 @@ discord-widget {
   --textColor: #ffffff;
   --buttonColor: #5865f2;
   --statusColor: #858585;
-
   display: flex;
   flex-direction: column;
   border-radius: 6px;
@@ -12,11 +11,9 @@ discord-widget {
   font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   color: #fff;
-
-  /* centered horizontally */
   margin: 0 auto;
   width: 100%;
-  max-width: 400px; /* matches #discord-container */
+  max-width: 400px;
 }
 
 /* Scrollbars */
@@ -187,7 +184,7 @@ discord-widget widget-footer widget-button-join:hover {
 /* Responsive adjustments */
 @media screen and (max-width: 540px) {
   discord-widget {
-    font-size: 12px; /* smaller text on mobile */
+    font-size: 12px;
   }
 
   discord-widget widget-header {
@@ -205,7 +202,7 @@ discord-widget widget-footer widget-button-join:hover {
   }
 
   discord-widget widget-footer widget-button-join {
-    width: 100%; /* button fills width on mobile */
+    width: 100%;
   }
 
   discord-widget widget-body widget-member widget-member-name {
