@@ -13,35 +13,15 @@ html {
   scrollbar-gutter: stable both-edges;
 }
 
-@media screen and (min-width: 802px) {
-  body {
-    max-width: 802px;
-  }
-}
-
-@media screen and (max-width: 824px) {
-  #username {
-    display: none;
-  }
-  #caret {
-    margin: auto auto auto -3px !important;
-  }
-  body {
-    font-size: smaller !important;
-  }
-}
-
-@media screen and (min-width: 540px) {
-  body {
-    max-width: 540px;
-  }
-}
-
 body {
   background-color: var(--background);
-  margin: auto;
+  margin: 0 auto;
+  text-align: center;
+  max-width: 802px;
+  padding: 0 10px; /* small padding for mobile screens */
 }
 
+/* Links */
 a {
   text-decoration: none;
   color: hsl(343, 60%, 50%);
@@ -51,17 +31,18 @@ a:hover {
   color: hsl(343, 60%, 50%);
 }
 
+/* Main container for text content */
 .statusPage {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px; /* spacing before Discord widget */
 }
 
 .statusPage h1 {
   font-size: 8rem;
-  margin-bottom: 1rem;
-  margin-top: 0;
+  margin: 0 0 1rem 0;
 }
 
 .statusPage h2 {
@@ -73,10 +54,40 @@ a:hover {
   font-size: 2rem;
   display: inline-block;
   padding: 20px 24px;
-  padding-bottom: 20px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  max-width: -moz-fit-content;
   max-width: fit-content;
+}
+
+/* Discord container */
+#discord-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#discord-container discord-widget {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 540px) {
+  body {
+    font-size: smaller;
+  }
+
+  .statusPage h1 {
+    font-size: 5rem;
+  }
+
+  .statusPage h2 {
+    font-size: 2rem;
+  }
+
+  .statusPage a {
+    font-size: 1.5rem;
+    padding: 16px 20px;
+  }
 }
