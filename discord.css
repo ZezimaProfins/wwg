@@ -4,6 +4,7 @@ discord-widget {
   --textColor: #ffffff;
   --buttonColor: #5865f2;
   --statusColor: #858585;
+
   display: flex;
   flex-direction: column;
   border-radius: 6px;
@@ -14,6 +15,7 @@ discord-widget {
   margin: 0 auto;
   width: 100%;
   max-width: 400px;
+  height: 500px; /* fixed height, can also use min-height for dynamic sizing */
 }
 
 /* Scrollbars */
@@ -61,12 +63,12 @@ discord-widget widget-header widget-header-count {
 /* Body */
 discord-widget widget-body {
   background-color: var(--bgColor);
-  flex: 1;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-  padding: 16px;
+  flex: 1 1 auto;   /* allow it to grow and shrink */
+  min-height: 0;    /* crucial for flex shrinking */
+  overflow-y: auto; /* scrollable member list */
   overflow-x: hidden;
-  overflow-y: auto;
-  min-height: 200px;
+  padding: 16px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* Members */
@@ -74,7 +76,7 @@ discord-widget widget-body widget-member {
   display: flex;
   align-items: center;
   position: relative;
-  margin: 6px 0; /* Back to original */
+  margin: 6px 0;
   border-radius: 4px;
   transition: background-color 0.2s ease;
   animation: fadeIn 0.3s ease-in;
@@ -170,7 +172,7 @@ discord-widget widget-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-shrink: 0;
+  flex-shrink: 0;  /* prevent footer from being pushed off */
   min-height: 30px;
   padding: 6px 12px;
   background-color: var(--bgColor);
