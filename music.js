@@ -1,6 +1,4 @@
 const audio = document.getElementById('audio');
-audio.volume = 0.1; // Initial volume
-
 const playPauseBtn = document.getElementById('play-pause');
 const playIcon = document.getElementById('play-icon');
 const pauseIcon = document.getElementById('pause-icon');
@@ -9,10 +7,13 @@ const progressContainer = document.getElementById('progress-container');
 const thumb = document.getElementById('thumb');
 const timeEl = document.getElementById('time');
 
-
 // Disable button until audio is ready
 playPauseBtn.disabled = true;
 playPauseBtn.style.opacity = 0.5;
+
+// --- Initial volume (start very low for fade-in) ---
+let targetVolume = 0.3; // desired final volume
+audio.volume = 0;       // start muted
 
 // When audio metadata is loaded
 audio.addEventListener('loadedmetadata', () => {
@@ -21,12 +22,24 @@ audio.addEventListener('loadedmetadata', () => {
   updateTime();
 });
 
-// Toggle play/pause
+// Toggle play/pause with fade-in
 playPauseBtn.addEventListener('click', () => {
   if (audio.paused) {
     audio.play().catch(err => alert("Audio could not play: " + err.message));
     playIcon.style.display = "none";
     pauseIcon.style.display = "block";
+
+    // Fade in volume over 2 seconds
+    let fadeDuration = 2000; // ms
+    let fadeSteps = 20;
+    let step = 0;
+    let interval = fadeDuration / fadeSteps;
+    let fadeInterval = setInterval(() => {
+      step++;
+      audio.volume = (targetVolume / fadeSteps) * step;
+      if (step >= fadeSteps) clearInterval(fadeInterval);
+    }, interval);
+
   } else {
     audio.pause();
     playIcon.style.display = "block";
@@ -81,7 +94,6 @@ document.addEventListener('touchmove', (e) => {
 progressContainer.addEventListener('click', (e) => {
   setAudioTime(e.clientX);
 });
-
 progressContainer.addEventListener('touchstart', (e) => {
   if (e.touches.length > 0) setAudioTime(e.touches[0].clientX);
 });
@@ -93,4 +105,3 @@ audio.addEventListener('error', () => {
   timeEl.textContent = 'File not found';
   alert('Error: Audio file could not be loaded.');
 });
-
