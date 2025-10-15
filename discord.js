@@ -1,100 +1,102 @@
 'use strict';
 
-window.addEventListener('load', () => {
-  const widgets = document.querySelectorAll('discord-widget');
+class DiscordWidget extends HTMLElement {
+  async connectedCallback() {
+    // Attributes (with defaults)
+    const guildId = this.dataset.serverId || this.id;
+    const width = this.getAttribute('width') || '400px';
+    const height = this.getAttribute('height') || '500px';
+    const footerText = this.getAttribute('footerText') || 'Kundun Online';
+    const color = this.getAttribute('color') || '#5865f2';
+    const backgroundColor = this.getAttribute('backgroundColor') || '#0c0c0d';
+    const textColor = this.getAttribute('textColor') || '#fff';
+    const statusColor = this.getAttribute('statusColor') || '#858585';
 
-  widgets.forEach(widget => {
-    // Attributes
-    const guildId = widget.getAttribute('data-server-id') || widget.getAttribute('id');
-    const width = widget.getAttribute('width') || '400px';
-    const height = widget.getAttribute('height') || '500px';
-    const footerText = widget.getAttribute('footerText') || 'Kundun Online';
-    const color = widget.getAttribute('color') || '#5865f2';
-    const backgroundColor = widget.getAttribute('backgroundColor') || '#0c0c0d';
-    const textColor = widget.getAttribute('textColor') || '#fff';
-    const statusColor = widget.getAttribute('statusColor') || '#858585';
-
-    // Structure
+    // Basic structure
     const head = document.createElement('widget-header');
     const logo = document.createElement('widget-logo');
     const count = document.createElement('widget-header-count');
     head.append(logo, count);
 
     const body = document.createElement('widget-body');
-    if (!guildId) {
-      body.textContent = 'No Discord server ID specified.';
-    }
-
     const footer = document.createElement('widget-footer');
     const footerInfo = document.createElement('widget-footer-info');
     const joinButton = document.createElement('widget-button-join');
-
     joinButton.textContent = 'Join';
     footerInfo.textContent = footerText;
+    footer.append(footerInfo, joinButton);
 
+    // Apply styles via CSS custom properties
+    Object.assign(this.style, { height, width });
+    this.style.setProperty('--color', color);
+    this.style.setProperty('--bgColor', backgroundColor);
+    this.style.setProperty('--textColor', textColor);
+    this.style.setProperty('--statusColor', statusColor);
+    this.style.setProperty('--buttonColor', safeShade(color, -10));
+
+    // Assemble
+    this.append(head, body, footer);
+
+    // Handle join button
     joinButton.addEventListener('click', () => {
       const href = joinButton.getAttribute('href');
       if (href) window.open(href, '_blank');
     });
 
-    footer.append(footerInfo, joinButton);
+    // No guild ID? Show error and exit
+    if (!guildId) {
+      body.textContent = 'No Discord server ID specified.';
+      return;
+    }
 
-    // Styles
-    widget.style.height = height;
-    widget.style.width = width;
-    widget.style.setProperty('--color', color);
-    widget.style.setProperty('--bgColor', backgroundColor);
-    widget.style.setProperty('--textColor', textColor);
-    widget.style.setProperty('--statusColor', statusColor);
-    widget.style.setProperty('--buttonColor', safeShade(color, -10));
+    // Fetch data
+    try {
+      const res = await fetch(`https://discord.com/api/guilds/${guildId}/widget.json`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
 
-    // Assemble
-    widget.append(head, body, footer);
+      count.innerHTML = `<strong>${data.presence_count || 0}</strong> Members Online`;
 
-    // Fetch Discord data
-    if (!guildId) return;
+      if (data.instant_invite) {
+        joinButton.setAttribute('href', data.instant_invite);
+      } else {
+        joinButton.remove();
+      }
 
-    fetch(`https://discord.com/api/guilds/${guildId}/widget.json`)
-      .then(res => res.json())
-      .then(data => {
-        count.innerHTML = `<strong>${data.presence_count || 0}</strong> Members Online`;
+      if (!Array.isArray(data.members)) {
+        body.textContent = 'No members to display.';
+        return;
+      }
 
-        if (data.instant_invite) {
-          joinButton.setAttribute('href', data.instant_invite);
-        } else {
-          joinButton.remove();
-        }
+      // Build member list
+      data.members.forEach(user => {
+        const member = document.createElement('widget-member');
+        const avatar = document.createElement('widget-member-avatar');
+        const img = document.createElement('img');
+        const status = document.createElement(`widget-member-status-${user.status}`);
+        const name = document.createElement('widget-member-name');
+        const statusText = document.createElement('widget-member-status-text');
 
-        if (!Array.isArray(data.members)) {
-          body.textContent = 'No members to display.';
-          return;
-        }
+        img.src = user.avatar_url;
+        status.classList.add('widget-member-status');
+        name.textContent = user.username;
+        if (user.game?.name) statusText.textContent = user.game.name;
 
-        data.members.forEach(user => {
-          const member = document.createElement('widget-member');
-          const avatar = document.createElement('widget-member-avatar');
-          const img = document.createElement('img');
-          const status = document.createElement(`widget-member-status-${user.status}`);
-          const name = document.createElement('widget-member-name');
-          const statusText = document.createElement('widget-member-status-text');
-
-          img.src = user.avatar_url;
-          status.classList.add('widget-member-status');
-          name.textContent = user.username;
-          if (user.game?.name) statusText.textContent = user.game.name;
-
-          avatar.append(img, status);
-          member.append(avatar, name, statusText);
-          body.append(member);
-        });
-      })
-      .catch(() => {
-        body.textContent = 'Failed to load Discord data.';
+        avatar.append(img, status);
+        member.append(avatar, name, statusText);
+        body.append(member);
       });
-  });
-});
+    } catch (err) {
+      console.error(err);
+      body.textContent = 'Failed to load Discord data.';
+    }
+  }
+}
 
-// Safer color shade function
+// Register the custom element
+customElements.define('discord-widget', DiscordWidget);
+
+// Utility: safer color shading
 function safeShade(hex, percent) {
   const c = hex.replace('#', '');
   if (!/^[0-9a-f]{6}$/i.test(c)) return hex;
