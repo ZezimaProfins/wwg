@@ -27,6 +27,19 @@ body {
   padding: 0 10px;
 }
 
+/* --- Optional Scrollbar for Chrome/Safari --- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--background-3);
+  border-radius: 10px;
+  border: 2px solid var(--background);
+}
+
 /* --- Main Logo --- */
 #text-content {
   display: flex;
@@ -97,17 +110,10 @@ body {
   animation: pulse-glow 1s infinite alternate;
 }
 
-/* Pulse glow keyframes */
 @keyframes pulse-glow {
-  0% {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-  }
-  100% {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  }
+  0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+  100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
 }
 
 #social-media a:hover img {
@@ -127,81 +133,26 @@ footer p {
   letter-spacing: 0.5px;
 }
 
-/* --- Optional Scrollbar for Chrome/Safari --- */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--background-3);
-  border-radius: 10px;
-  border: 2px solid var(--background);
-}
-
 /* --- Responsive --- */
 @media screen and (max-width: 820px) {
-  body {
-    max-width: 90%;
-    padding: 0 15px;
-  }
+  body { max-width: 90%; padding: 0 15px; }
 }
 
 @media screen and (max-width: 540px) {
-  body {
-    font-size: smaller;
-  }
-
-  #text-content {
-    margin: 40px 0 30px;
-  }
-
-  footer {
-    font-size: 0.8rem; padding: 15px 0;
-  }
-
-  #community-section {
-    gap: 15px;
-  }
-
-  #social-media {
-    gap: 15px; margin: 20px 0;
-  }
-
-  #social-media a img {
-    width: 28px; height: 28px;
-  }
-
-  #social-media a {
-    padding: 6px;
-  }
+  body { font-size: smaller; }
+  #text-content { margin: 40px 0 30px; }
+  footer { font-size: 0.8rem; padding: 15px 0; }
+  #community-section { gap: 15px; }
+  #social-media { gap: 15px; margin: 20px 0; }
+  #social-media a img { width: 28px; height: 28px; }
+  #social-media a { padding: 6px; }
 }
 
 @media screen and (max-width: 400px) {
-  #discord-container {
-    margin-bottom: 10px;
-  }
-
-  #community-section {
-    gap: 12px; margin-bottom: 8px;
-  }
-
-  #social-media {
-    gap: 12px; margin: 15px 0;
-  }
-
-  #social-media a img {
-    width: 24px; height: 24px;
-  }
-  
-  #social-media a {
-    padding: 5px;
-  }
-
-  footer {
-    margin-top: 8px;
-  }
+  #discord-container { margin-bottom: 10px; }
+  #community-section { gap: 12px; margin-bottom: 8px; }
+  #social-media { gap: 12px; margin: 15px 0; }
+  #social-media a img { width: 24px; height: 24px; }
+  #social-media a { padding: 5px; }
+  footer { margin-top: 8px; }
 }

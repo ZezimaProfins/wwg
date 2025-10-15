@@ -14,7 +14,9 @@
   <meta property="og:image" content="logo.png">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="discord.css">
+  <link rel="stylesheet" href="music.css">
   <script src="discord.js" defer></script>
+  <script src="music.js" defer></script>
 </head>
 <body>
   <main id="text-content" class="statusPage">
@@ -42,17 +44,43 @@
       <a href="#" target="_blank" rel="noopener" aria-label="YouTube">
         <img src="youtube.svg" alt="YouTube">
       </a>
-      <a href=#" target="_blank" rel="noopener" aria-label="Reddit">
+      <a href="#" target="_blank" rel="noopener" aria-label="Reddit">
         <img src="reddit.svg" alt="Reddit">
       </a>
+    </div>
+  </section>
+
+  <section id="music-player-section">
+    <div id="music-player">
+      <audio id="audio" preload="metadata">
+        <source src="intro.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+
+      <button id="play-pause" aria-label="Play/Pause">
+        <svg id="play-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+          <polygon points="5,3 19,12 5,21"></polygon>
+        </svg>
+        <svg id="pause-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none;">
+          <rect x="5" y="3" width="5" height="18"></rect>
+          <rect x="14" y="3" width="5" height="18"></rect>
+        </svg>
+      </button>
+
+      <div id="progress-container">
+        <div id="progress"></div>
+        <div id="thumb"></div>
+      </div>
+
+      <span id="time">0:00 / 0:00</span>
     </div>
   </section>
 
   <footer role="contentinfo">
     <p id="footer-text"></p>
   </footer>
-  <script>
-    document.getElementById('footer-text').textContent = `Kundun Online © ${new Date().getFullYear()}. All rights reserved.`;
+<script>
+document.getElementById('footer-text').textContent = `Kundun Online © ${new Date().getFullYear()}. All rights reserved.`;
   </script>
 </body>
 </html>
