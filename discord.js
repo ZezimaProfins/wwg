@@ -23,6 +23,8 @@ class DiscordWidget extends HTMLElement {
     const footerInfo = document.createElement('widget-footer-info');
     const joinButton = document.createElement('widget-button-join');
     joinButton.textContent = 'Join';
+    joinButton.setAttribute('role', 'button');
+    joinButton.setAttribute('tabindex', '0');
     footerInfo.textContent = footerText;
     footer.append(footerInfo, joinButton);
 
@@ -37,10 +39,18 @@ class DiscordWidget extends HTMLElement {
     // Assemble
     this.append(head, body, footer);
 
-    // Handle join button
-    joinButton.addEventListener('click', () => {
+    // Handle join button clicks and keyboard
+    const handleJoin = () => {
       const href = joinButton.getAttribute('href');
       if (href) window.open(href, '_blank');
+    };
+    
+    joinButton.addEventListener('click', handleJoin);
+    joinButton.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleJoin();
+      }
     });
 
     // No guild ID? Show error and exit
@@ -49,10 +59,24 @@ class DiscordWidget extends HTMLElement {
       return;
     }
 
+    // Show loading state
+    body.textContent = 'Loading...';
+
     // Fetch data
     try {
       const res = await fetch(`https://discord.com/api/guilds/${guildId}/widget.json`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      
+      if (!res.ok) {
+        if (res.status === 403) {
+          body.textContent = 'Discord widget is disabled for this server.';
+        } else if (res.status === 404) {
+          body.textContent = 'Discord server not found.';
+        } else {
+          body.textContent = `Error loading widget (${res.status}).`;
+        }
+        return;
+      }
+      
       const data = await res.json();
 
       count.innerHTML = `<strong>${data.presence_count || 0}</strong> Members Online`;
@@ -63,10 +87,13 @@ class DiscordWidget extends HTMLElement {
         joinButton.remove();
       }
 
-      if (!Array.isArray(data.members)) {
+      if (!Array.isArray(data.members) || data.members.length === 0) {
         body.textContent = 'No members to display.';
         return;
       }
+
+      // Clear loading text
+      body.textContent = '';
 
       // Build member list
       data.members.forEach(user => {
@@ -77,7 +104,13 @@ class DiscordWidget extends HTMLElement {
         const name = document.createElement('widget-member-name');
         const statusText = document.createElement('widget-member-status-text');
 
-        img.src = user.avatar_url;
+        // Set avatar with fallback
+        img.src = user.avatar_url || createDefaultAvatar();
+        img.alt = `${user.username}'s avatar`;
+        img.onerror = () => {
+          img.src = createDefaultAvatar();
+        };
+
         status.classList.add('widget-member-status');
         name.textContent = user.username;
         if (user.game?.name) statusText.textContent = user.game.name;
@@ -87,7 +120,7 @@ class DiscordWidget extends HTMLElement {
         body.append(member);
       });
     } catch (err) {
-      console.error(err);
+      console.error('Discord widget error:', err);
       body.textContent = 'Failed to load Discord data.';
     }
   }
@@ -120,4 +153,9 @@ function safeShade(hex, percent) {
 
 function clamp(v) {
   return Math.min(255, Math.max(0, v));
+}
+
+// Create default avatar SVG
+function createDefaultAvatar() {
+  return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%23747f8d"/%3E%3Ctext x="50" y="50" text-anchor="middle" dominant-baseline="central" font-size="40" fill="%23fff" font-family="sans-serif"%3E?%3C/text%3E%3C/svg%3E';
 }
