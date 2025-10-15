@@ -1,5 +1,5 @@
 const audio = document.getElementById('audio');
-audio.volume = 0.3; // Initial volume
+audio.volume = 0.1; // Initial volume
 
 const playPauseBtn = document.getElementById('play-pause');
 const playIcon = document.getElementById('play-icon');
@@ -93,3 +93,4 @@ audio.addEventListener('error', () => {
   timeEl.textContent = 'File not found';
   alert('Error: Audio file could not be loaded.');
 });
+
