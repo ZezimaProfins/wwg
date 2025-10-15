@@ -1,4 +1,6 @@
 const audio = document.getElementById('audio');
+audio.volume = 0.3; // Initial volume
+
 const playPauseBtn = document.getElementById('play-pause');
 const playIcon = document.getElementById('play-icon');
 const pauseIcon = document.getElementById('pause-icon');
@@ -6,6 +8,7 @@ const progress = document.getElementById('progress');
 const progressContainer = document.getElementById('progress-container');
 const thumb = document.getElementById('thumb');
 const timeEl = document.getElementById('time');
+
 
 // Disable button until audio is ready
 playPauseBtn.disabled = true;
