@@ -90,7 +90,7 @@ discord-widget widget-body widget-member:hover {
 discord-widget widget-body widget-member .member-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 1;
   min-width: 0;
 }
@@ -113,12 +113,12 @@ discord-widget widget-body widget-member widget-member-avatar img {
 /* Status indicators */
 .widget-member-status {
   position: absolute;
-  bottom: 5px;
-  right: 1px;
+  bottom: 2px;
+  right: 0px;
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 2px solid var(--bgColor);
+  border: 2px solid var(--color);
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
