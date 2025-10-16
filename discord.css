@@ -18,6 +18,12 @@ discord-widget {
   height: 500px;
 }
 
+/* --- Box sizing consistency --- */
+discord-widget,
+discord-widget * {
+  box-sizing: border-box;
+}
+
 /* --- Widget scrollbar --- */
 discord-widget::-webkit-scrollbar {
   width: 16px;
@@ -46,6 +52,8 @@ discord-widget widget-header {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
 }
 
 discord-widget widget-header widget-logo {
@@ -66,8 +74,22 @@ discord-widget widget-body {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  padding: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  position: relative;
+  scroll-padding-top: 12px;
+  scroll-padding-bottom: 12px;
+}
+
+/* Pseudo-elements for scroll spacing (fixes header/footer clipping) */
+discord-widget widget-body::before,
+discord-widget widget-body::after {
+  content: "";
+  display: block;
+  height: 10px; /* space between header/footer and first/last member */
+  flex: 0 0 auto;
+  pointer-events: none;
 }
 
 /* --- Members --- */
@@ -164,6 +186,8 @@ discord-widget widget-footer {
   background-color: var(--bgColor);
   box-shadow: 0 -1px 18px rgba(0,0,0,0.3), 0 -1px 0 rgba(0,0,0,0.2);
   color: #fff;
+  position: relative;
+  z-index: 2;
 }
 
 discord-widget widget-footer widget-button-join {
@@ -213,6 +237,10 @@ discord-widget widget-footer widget-button-join:not([href]) {
     max-width: 80px;
     text-align: left;
   }
+  discord-widget widget-body::before,
+  discord-widget widget-body::after {
+    height: 8px;
+  }
   discord-widget widget-body widget-member widget-member-name { max-width: 120px; }
 }
 
@@ -222,6 +250,10 @@ discord-widget widget-footer widget-button-join:not([href]) {
     max-width: 0;
     transform: translateX(-30px);
     pointer-events: none;
+  }
+  discord-widget widget-body::before,
+  discord-widget widget-body::after {
+    height: 6px;
   }
   discord-widget widget-body widget-member widget-member-name { max-width: 100%; }
 }
