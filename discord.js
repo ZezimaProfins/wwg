@@ -21,16 +21,13 @@ class DiscordWidget extends HTMLElement {
     // Create body and footer
     const body = document.createElement('widget-body');
     const footer = document.createElement('widget-footer');
-    const footerInfo = document.createElement('widget-footer-info');
-    const joinButton = document.createElement('widget-button-join');
+	const joinButton = document.createElement('widget-button-join');
+	joinButton.textContent = 'Join';
+	joinButton.setAttribute('role', 'button');
+	joinButton.setAttribute('tabindex', '0');
+	joinButton.setAttribute('aria-label', `Join ${guildId} Discord server`);
 
-    joinButton.textContent = 'Join';
-    joinButton.setAttribute('role', 'button');
-    joinButton.setAttribute('tabindex', '0');
-    joinButton.setAttribute('aria-label', `Join ${guildId} Discord server`);
-
-    footerInfo.textContent = footerText;
-    footer.append(footerInfo, joinButton);
+	footer.append(joinButton); // only the button, no footerInfo
 
     // Apply style variables
     Object.assign(this.style, { width, height });
